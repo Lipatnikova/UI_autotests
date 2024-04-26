@@ -1,6 +1,7 @@
 import random
 from typing import List
 
+import allure
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as Wait
@@ -51,22 +52,22 @@ class BasePage:
 
     def open(self, url) -> None:
         """This method opens a browser by the provided link"""
-        self.driver.get(url)
+        with allure.step(f"Открыть страницу {url}"):
+            self.driver.get(url)
 
-    @staticmethod
-    def clear_input_and_send_keys(input_element: WebElement, text: str) -> None:
+    def clear_input_and_send_keys(self, locator: WebElement or tuple[str, str], text: str) -> None:
         """This method clears the input field, clicks on it, and then sends the provided text to the input field"""
-        input_element.click()
-        input_element.clear()
-        input_element.send_keys(text)
+        input_field = self.element_is_visible(locator)
+        input_field.click()
+        input_field.clear()
+        input_field.send_keys(text)
 
-    @staticmethod
-    def select_random_checkboxes(checkboxes: List[WebElement]) -> None:
+    def select_random_checkbox(self, locator: WebElement or tuple[str, str]) -> None:
         """ This method selects a random checkbox from the provided list of checkboxes"""
+        checkboxes = self.elements_are_visible(locator)
         checkbox = random.choice(checkboxes)
         checkbox.click()
 
-    @staticmethod
-    def click_button(button: WebElement) -> None:
+    def click_button(self, locator: WebElement or tuple[str, str]) -> None:
         """ This method clicks on the provided button"""
-        button.click()
+        self.element_is_visible(locator).click()

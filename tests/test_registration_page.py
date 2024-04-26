@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from config.links import Links
@@ -7,6 +8,10 @@ from pages.registration_page import RegistrationPage
 
 class TestRegistration:
     @pytest.mark.ui
+    @allure.epic("Управление пользователями")
+    @allure.feature("Регистрация")
+    @allure.story("Отправка формы и отсутствие сообщений об ошибках")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_check_count_of_error_messages_after_filling_required_fields_registration_form(self, driver):
         """
         Цель: проверить отсутствие сообщений об ошибке при заполнении
@@ -23,7 +28,7 @@ class TestRegistration:
         8. Заполнить поле Password.
         9. Заполнить поле Confirm password.
         10. Нажать кнопку Submit.
-        11. Проверить количество сообщений об ошибках на странице.
+        11. Проверить количество сообщений об ошибках (This field is required) на странице.
         Ожидаемый результат: Сообщения об ошибках на странице отсутствуют, количество сообщений 0.
         """
         info = next(create_person())
@@ -46,7 +51,8 @@ class TestRegistration:
         reg_page.fill_confirm_password(password)
         reg_page.click_submit()
         count_error_messages = reg_page.find_count_error_messages_by_page()
-        assert count_error_messages == 0, \
-            (f"Actual count error messages: {count_error_messages}."
-             f"Expected: error messages should not be displayed after filling out "
-             f"the required fields of the registration form")
+        with allure.step("Проверить количество сообщений об ошибках (This field is required) на странице"):
+            assert count_error_messages == 0, \
+                (f"Actual count error messages: {count_error_messages}."
+                 f"Expected: error messages should not be displayed after filling out "
+                 f"the required fields of the registration form")
