@@ -7,30 +7,31 @@ from pages.registration_page import RegistrationPage
 
 
 class TestRegistration:
-    @pytest.mark.ui
     @allure.epic("Управление пользователями")
     @allure.feature("Регистрация")
     @allure.story("Отправка формы и отсутствие сообщений об ошибках")
     @allure.severity(allure.severity_level.NORMAL)
+    @allure.testcase("U1")
+    @allure.description(
+        """
+    Цель: проверить отсутствие сообщений об ошибке при заполнении
+    обязательных полей формы регистрации.
+    Предусловие: открыть браузер.
+    Шаги:
+    1. Открыть страницу https://www.way2automation.com/way2auto_jquery/registration.php#load_box .
+    2. Заполнить поле First name.
+    3. Заполнить поле Last name.
+    4. Выбрать случайным образом чек-бокс Hobby.
+    5. Заполнить поле Phone number.
+    6. Заполнить поле Username.
+    7. Заполнить поле Email.
+    8. Заполнить поле Password.
+    9. Заполнить поле Confirm password.
+    10. Нажать кнопку Submit.
+    11. Проверить количество сообщений об ошибках (This field is required) на странице.
+    Ожидаемый результат: Сообщения об ошибках на странице отсутствуют, количество сообщений 0."""
+    )
     def test_check_count_of_error_messages_after_filling_required_fields_registration_form(self, driver):
-        """
-        Цель: проверить отсутствие сообщений об ошибке при заполнении
-        обязательных полей формы регистрации.
-        Предусловие: открыть браузер.
-        Шаги:
-        1. Открыть страницу https://www.way2automation.com/way2auto_jquery/registration.php#load_box .
-        2. Заполнить поле First name.
-        3. Заполнить поле Last name.
-        4. Выбрать случайным образом чек-бокс Hobby.
-        5. Заполнить поле Phone number.
-        6. Заполнить поле Username.
-        7. Заполнить поле Email.
-        8. Заполнить поле Password.
-        9. Заполнить поле Confirm password.
-        10. Нажать кнопку Submit.
-        11. Проверить количество сообщений об ошибках (This field is required) на странице.
-        Ожидаемый результат: Сообщения об ошибках на странице отсутствуют, количество сообщений 0.
-        """
         info = next(create_person())
         first_name = info.first_name
         last_name = info.last_name

@@ -2,6 +2,8 @@ import random
 from typing import List
 
 import allure
+from selenium.common import TimeoutException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as Wait
@@ -50,6 +52,18 @@ class BasePage:
         """
         return Wait(self.driver, timeout).until(EC.visibility_of_all_elements_located(locator))
 
+    def is_element_present(self, locator: WebElement or tuple[str, str]) -> bool:
+        """
+        This method checks if the specified element is present on the webpage.
+        It uses the `element_is_present` method to find the element and returns `True`
+        if the element is found within the specified timeout, otherwise, it returns `False`.
+        """
+        try:
+            self.element_is_present(locator)
+            return True
+        except TimeoutException:
+            return False
+
     def open(self, url) -> None:
         """This method opens a browser by the provided link"""
         with allure.step(f"Открыть страницу {url}"):
@@ -71,3 +85,31 @@ class BasePage:
     def click_button(self, locator: WebElement or tuple[str, str]) -> None:
         """ This method clicks on the provided button"""
         self.element_is_visible(locator).click()
+
+    def switch_to_iframe(self, locator: WebElement or tuple[str, str]) -> None:
+        """ This method switches to an iframe element"""
+        self.driver.switch_to.frame(self.element_is_visible(locator))
+
+    def action_drag_and_drop_to_element(self, what: WebElement, where: WebElement) -> None:
+        """Drag and drop element to element"""
+        action = ActionChains(self.driver)
+        action.drag_and_drop(what, where)
+        action.perform()
+
+    def get_text(self, locator: WebElement or tuple[str, str]) -> str:
+        """ This method gets the text from the element"""
+        return self.element_is_visible(locator).text
+
+    def fill_alert_and_accept(self, name: str) -> None:
+        """ This method switches to an alert, send keys in input alert and accept alert"""
+        alert = self.driver.switch_to.alert
+        alert.send_keys(name)
+        alert.accept()
+
+    def switch_to_the_x_window(self, index: int) -> None:
+        """ This method switches to a window by index window"""
+        self.driver.switch_to.window(self.driver.window_handles[index])
+
+    def get_count_windows(self) -> int:
+        """ This method gets the count of windows"""
+        return len(self.driver.window_handles)
