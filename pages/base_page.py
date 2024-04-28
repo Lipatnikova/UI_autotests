@@ -69,6 +69,11 @@ class BasePage:
         with allure.step(f"Открыть страницу {url}"):
             self.driver.get(url)
 
+    def get_current_url(self) -> str:
+        """This method gets current url"""
+        with allure.step("Получить URL текущей страницы"):
+            return self.driver.current_url
+
     def clear_input_and_send_keys(self, locator: WebElement or tuple[str, str], text: str) -> None:
         """This method clears the input field, clicks on it, and then sends the provided text to the input field"""
         input_field = self.element_is_visible(locator)
@@ -96,6 +101,15 @@ class BasePage:
         action.drag_and_drop(what, where)
         action.perform()
 
+    def action_drag_and_drop_by_offset(self, elem: WebElement, x, y):
+        """
+        Holds down the left mouse button on the source element,
+        then moves to the target offset and releases the mouse button.
+        """
+        action = ActionChains(self.driver)
+        action.drag_and_drop_by_offset(elem, x, y)
+        action.perform()
+
     def get_text(self, locator: WebElement or tuple[str, str]) -> str:
         """ This method gets the text from the element"""
         return self.element_is_visible(locator).text
@@ -105,6 +119,13 @@ class BasePage:
         alert = self.driver.switch_to.alert
         alert.send_keys(name)
         alert.accept()
+
+    def get_alert_text_and_accept(self) -> str:
+        """ This method switches to an alert, gets text and accept alert"""
+        alert = self.driver.switch_to.alert
+        alert_text = alert.text
+        alert.accept()
+        return alert_text
 
     def switch_to_the_x_window(self, index: int) -> None:
         """ This method switches to a window by index window"""

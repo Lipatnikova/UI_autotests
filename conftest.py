@@ -1,3 +1,6 @@
+import datetime
+
+import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -32,3 +35,18 @@ def driver(request):
     request.cls.driver = driver
     yield driver
     driver.quit()
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item):
+    outcome = yield
+    result = outcome.get_result()
+
+    if result.failed:
+        if 'driver' in item.fixturenames:
+            browser = item.funcargs['driver']
+            allure.attach(
+                browser.get_screenshot_as_png(),
+                name=f'screenshot_{datetime.datetime.utcnow()}',
+                attachment_type=allure.attachment_type.PNG
+            )

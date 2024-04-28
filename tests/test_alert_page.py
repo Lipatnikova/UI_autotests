@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from config.links import Links
 from generator.generator import create_person
@@ -28,7 +29,7 @@ class TestAlertPage:
         alert_page = AlertPage(driver)
         alert_page.open(Links.URL_ALERT)
         alert_page.click_input_alert()
-        alert_page.switch_to_iframe_alert()
+        alert_page.switch_to_iframe_alert_for_input_alert()
         alert_page.click_button_to_demonstrate_the_input_box()
         alert_page.fill_alert_custom_text(first_name)
         message = alert_page.extract_text_custom_message()
@@ -36,3 +37,30 @@ class TestAlertPage:
             assert first_name in message, \
                 (f"The message hasn't contains expected text: {first_name}."
                  f"Actual message: {message}")
+
+    @allure.epic("Работа с элементами на странице")
+    @allure.feature("Alerts")
+    @allure.story("Проверить текст в Alert падающий кейс")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.testcase("U4_1")
+    @allure.description("""
+        Цель: убедиться, что Alert содержит текст \"I am an alert box!\".
+        Предусловия: открыть браузер.
+        Шаги:
+        1.	Открыть http://way2automation.com/way2auto_jquery/alert.php
+        2.	Нажать Simple Alert.
+        3.	Проверить, что Alert содержит текст \"I am an alert box!\".
+        4.	Нажать кнопку ОК.
+        """)
+    def test_verify_message_in_simple_alert(self, driver):
+        alert_page = AlertPage(driver)
+        alert_page.open(Links.URL_ALERT)
+        alert_page.switch_to_iframe_alert_for_simple_alert()
+        alert_page.click_button_to_demonstrate_the_input_box()
+        alert_text = alert_page.get_alert_text_and_accept()
+        expected_text = "I am NOT an alert box!"
+        with allure.step(f"Проверить, что Alert содержит текст {expected_text}"):
+            assert alert_text == expected_text, \
+                (f"The message in Alert hasn't contains expected text: {expected_text}."
+                 f"Actual message: {alert_text}")
+

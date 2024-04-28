@@ -22,3 +22,8 @@ class DroppablePage(BasePage):
     def extract_message_about_dropped(self):
         with allure.step("Получить текст сообщения в карточке Drop here"):
             return self.get_text(self.MESSAGE_DROPPED)
+
+    def drag_and_drop_by_x_y(self):
+        with allure.step("Перетащить элемент в принимающую карточку"):
+            drag_me = self.element_is_visible(self.DRAG_ME)
+            self.action_drag_and_drop_by_offset(drag_me, 10, 300)
