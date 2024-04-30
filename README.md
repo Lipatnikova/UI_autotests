@@ -12,6 +12,8 @@
 7. 1. Run the tests use the command `pytest -s -v`.
 7. 2. Run the tests with Options `pytest -v -s --browser_name firefox`.
 7. 3. Run the tests with generated Allure report `pytest -s -v --alluredir allure-results`
-8. Просмотреть отчет Allure `allure serve allure-results`.
+8. View Allure report `allure serve allure-results`.
+9. Run the script to execute only the failed test cases from the previous run with generated Allure report `.\run_last_failed_tests.sh`
 #### Options:
---browser_name: is optional, browser name (chrome | firefox), default=chrome
+- --browser_name: is optional, browser name (chrome | firefox), default=chrome
+- --lf (or --last-failed), is optional, running only failed test cases from the previous runs tests

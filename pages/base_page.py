@@ -74,6 +74,11 @@ class BasePage:
         with allure.step("Получить URL текущей страницы"):
             return self.driver.current_url
 
+    def refresh_page(self) -> None:
+        """This method refreshes the page"""
+        with allure.step("Обновить страницу"):
+            self.driver.refresh()
+
     def clear_input_and_send_keys(self, locator: WebElement or tuple[str, str], text: str) -> None:
         """This method clears the input field, clicks on it, and then sends the provided text to the input field"""
         input_field = self.element_is_visible(locator)
