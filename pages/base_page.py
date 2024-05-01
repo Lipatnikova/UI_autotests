@@ -3,7 +3,7 @@ from typing import List
 
 import allure
 from selenium.common import TimeoutException
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as Wait
@@ -64,6 +64,20 @@ class BasePage:
         except TimeoutException:
             return False
 
+    def is_element_focused(self, locator: WebElement) -> bool:
+        """This method checks that is element is focused"""
+        focused_element = self.driver.switch_to.active_element
+        return focused_element == locator
+
+    def blur_input_field(self, input_field) -> None:
+        """This method blurs the input field, which means it removes the focus from the input field"""
+        self.driver.execute_script("arguments[0].blur();", input_field)
+
+    def is_scroll_present(self) -> bool:
+        """This method checks if there is a scroll present on the webpage"""
+        return self.driver.execute_script(
+            "return document.documentElement.scrollHeight>document.documentElement.clientHeight;")
+
     def open(self, url) -> None:
         """This method opens a browser by the provided link"""
         with allure.step(f"Открыть страницу {url}"):
@@ -106,7 +120,7 @@ class BasePage:
         action.drag_and_drop(what, where)
         action.perform()
 
-    def action_drag_and_drop_by_offset(self, elem: WebElement, x, y):
+    def action_drag_and_drop_by_offset(self, elem: WebElement, x: int, y: int) -> None:
         """
         Holds down the left mouse button on the source element,
         then moves to the target offset and releases the mouse button.

@@ -34,3 +34,13 @@ class AngularjsLoginPage(BasePage):
     def get_message_incorrect_username_or_password(self) -> str:
         with allure.step("Получить текст сообщения об ошибке \"Username or password is incorrect\""):
             return self.get_text(self.MESSAGE_INCORRECT)
+
+    def is_username_has_focus(self) -> bool:
+        with allure.step("Проверить, что поле Username имеет фокус"):
+            username = self.element_is_visible(self.USERNAME_INPUT)
+            return self.is_element_focused(username)
+
+    def remove_focus_on_username_field(self) -> None:
+        with allure.step("Убрать фокус с поля Username"):
+            username = self.element_is_visible(self.USERNAME_INPUT)
+            self.blur_input_field(username)

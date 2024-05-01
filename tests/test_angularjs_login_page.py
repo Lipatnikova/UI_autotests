@@ -26,7 +26,7 @@ class TestAngularjsLoginPage:
         """)
     @pytest.mark.parametrize("username, password, message", [("angular", "password", "success"),
                                                              ("angular123", "password123", "failure")])
-    def test_angularjs_login(self, driver, username, password, message):
+    def test_verify_angularjs_login(self, driver, username, password, message):
         info = next(create_person())
         user_desc = info.last_name
 
@@ -45,3 +45,42 @@ class TestAngularjsLoginPage:
                 assert page_login.get_message_incorrect_username_or_password() and "login" in current_url, \
                     ('The message "Username or password is incorrect" doesn\'t show or '
                      'current url hasn\'t expected endpoint "login"')
+
+    @allure.epic("Управление пользователями")
+    @allure.feature("Авторизация angularjs")
+    @allure.story("Проверить фокус на поле username")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.testcase("U6_1")
+    def test_verify_focus_on_username_field(self, driver):
+        info = next(create_person())
+        page_login = AngularjsLoginPage(driver)
+        page_login.open(Links.URL_LOGIN)
+        assert page_login.is_username_has_focus() is False, \
+            "Username field shouldn't have focus initially"
+        page_login.fill_username(info.username)
+        assert page_login.is_username_has_focus() is True, \
+            "Username field should have focus after filling it"
+        page_login.remove_focus_on_username_field()
+        assert page_login.is_username_has_focus() is False, \
+            "Username field shouldn't have focus initially"
+
+    @allure.epic("Управление пользователями")
+    @allure.feature("Авторизация angularjs")
+    @allure.story("Проверить наличие scroll на странице")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.testcase("U6_2_1")
+    @allure.description("""
+            Цель: проверить наличие scroll на страницие:
+            Предусловия:
+            1. Открыть браузер.
+            Шаги:
+            1. Открыть сайт https://www.way2automation.com/angularjs-protractor/registeration/#/login .
+            2. Проверить, что на странице есть scroll.
+            Ожидаемый результат:
+            Scroll отсутствует на странице""")
+    def test_verify_is_scroll_by_login_page(self, driver):
+        page_login = AngularjsLoginPage(driver)
+        page_login.open(Links.URL_LOGIN)
+        with allure.step("Проверить, что на странице есть scroll"):
+            assert page_login.is_scroll_present() is False, \
+                "The page is not scrolled by page"

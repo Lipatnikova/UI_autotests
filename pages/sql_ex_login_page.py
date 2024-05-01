@@ -3,7 +3,7 @@ import allure
 from pages.base_page import BasePage
 
 
-class SqlExPage(BasePage):
+class SqlExLoginPage(BasePage):
     LOGIN_FORM = ("xpath", "//*[@name='frmlogin']")
     BTN_LOGIN_WITHOUT_REGISTRATION = ("xpath", "//*[@name='subm2']")
 
@@ -18,4 +18,3 @@ class SqlExPage(BasePage):
     def login_form_is_visible(self) -> bool:
         with allure.step("Проверить видимость формы авторизации"):
             return self.is_element_present(self.LOGIN_FORM)
-
