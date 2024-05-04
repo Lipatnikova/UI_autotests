@@ -3,6 +3,7 @@ import datetime
 import allure
 import pytest
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
@@ -31,6 +32,8 @@ def driver(request):
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1920,1080")
+    options.to_capabilities()
 
     driver = None
 
