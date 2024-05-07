@@ -76,7 +76,7 @@ class BasePage:
     def is_scroll_present(self) -> bool:
         """This method checks if there is a scroll present on the webpage"""
         return self.driver.execute_script(
-            "return document.documentElement.scrollHeight>document.documentElement.clientHeight;")
+            "return document.documentElement.scrollHeight > document.documentElement.offsetHeight;")
 
     def open(self, url) -> None:
         """This method opens a browser by the provided link"""

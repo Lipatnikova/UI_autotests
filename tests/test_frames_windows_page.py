@@ -19,7 +19,7 @@ class TestFramesWindowsPage:
         3.	Перенести фокус на новую вкладку, нажать ссылку New Browser Tab.
         4.	Убедиться, что открылась третья вкладка.
         """)
-    def test_veryfi_count_windows_after_clicks_by_links_new_browser_tab(self, driver):
+    def test_verify_count_windows_after_clicks_by_links(self, driver):
         page = FramesWindowsPage(driver)
         page.open(Links.URL_TABS)
         page.switch_to_iframe_tab()

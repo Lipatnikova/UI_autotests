@@ -1,5 +1,4 @@
 import allure
-import pytest
 
 from config.links import Links
 from generator.generator import create_person
@@ -31,7 +30,7 @@ class TestRegistration:
     11. Проверить количество сообщений об ошибках (This field is required) на странице.
     Ожидаемый результат: Сообщения об ошибках на странице отсутствуют, количество сообщений 0."""
     )
-    def test_check_count_of_error_messages_after_filling_required_fields_registration_form(self, driver):
+    def test_check_count_errors_on_reg_fail(self, driver):
         info = next(create_person())
         first_name = info.first_name
         last_name = info.last_name

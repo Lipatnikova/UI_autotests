@@ -1,5 +1,4 @@
 import allure
-import pytest
 
 from config.links import Links
 from generator.generator import create_person
@@ -63,4 +62,3 @@ class TestAlertPage:
             assert alert_text == expected_text, \
                 (f"The message in Alert hasn't contains expected text: {expected_text}."
                  f"Actual message: {alert_text}")
-

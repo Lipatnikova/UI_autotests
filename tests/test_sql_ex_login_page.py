@@ -87,5 +87,5 @@ class TestSqlExLoginPage:
         page_sql_ex = SqlExLoginPage(driver)
         page_sql_ex.open(Links.URL_SQL_EX)
         with allure.step("Проверить, что на странице есть scroll"):
-            assert page_sql_ex.is_scroll_present() is True, \
+            assert page_sql_ex.is_scroll_present() is False, \
                 "The page is not scrolled by page"

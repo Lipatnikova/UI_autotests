@@ -1,12 +1,7 @@
 import datetime
-
 import allure
 import pytest
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.edge.options import Options as EdgeOptions
+from helpers.driver_factory import DriverFactory
 
 
 def pytest_addoption(parser):
@@ -16,36 +11,12 @@ def pytest_addoption(parser):
                      help="Selenium Grid Hub address")
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="function")
 def driver(request):
     browser_name = request.config.getoption("--browser_name")
     hub_address = request.config.getoption("--hub_address")
-    options = None
 
-    if browser_name == "chrome":
-        options = ChromeOptions()
-    elif browser_name == "firefox":
-        options = FirefoxOptions()
-    elif browser_name == "edge":
-        options = EdgeOptions()
-
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--window-size=1920,1080")
-    options.to_capabilities()
-
-    driver = None
-
-    if hub_address:
-        driver = webdriver.Remote(command_executor=hub_address, options=options)
-    else:
-        if browser_name == "chrome":
-            driver = webdriver.Chrome(options=options)
-        elif browser_name == "firefox":
-            driver = webdriver.Firefox(options=options)
-        elif browser_name == "edge":
-            driver = webdriver.Edge(options=options)
+    driver = DriverFactory.create_driver(browser_name, hub_address)
 
     request.cls.driver = driver
     yield driver
@@ -53,12 +24,12 @@ def driver(request):
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
-def pytest_runtest_makereport(item):
+def pytest_runtest_makereport(item, call):
     outcome = yield
     result = outcome.get_result()
 
-    if result.failed:
-        if 'driver' in item.fixturenames:
+    if result.when == 'call' and result.failed:
+        if 'driver' in item.fixturenames and call.excinfo is not None:
             browser = item.funcargs['driver']
             allure.attach(
                 browser.get_screenshot_as_png(),

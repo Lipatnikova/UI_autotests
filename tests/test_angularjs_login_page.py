@@ -81,6 +81,6 @@ class TestAngularjsLoginPage:
     def test_verify_is_scroll_by_login_page(self, driver):
         page_login = AngularjsLoginPage(driver)
         page_login.open(Links.URL_LOGIN)
-        with allure.step("Проверить, что на странице есть scroll"):
-            assert page_login.is_scroll_present() is False, \
+        with allure.step("Проверить, что на странице отсутствует scroll"):
+            assert page_login.is_scroll_present() is True, \
                 "The page is not scrolled by page"

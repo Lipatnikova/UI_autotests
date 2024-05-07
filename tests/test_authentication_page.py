@@ -1,6 +1,7 @@
 import allure
 
 from config.links import Links
+from generator.generator import create_person
 from pages.authentication_page import AuthPage
 
 
@@ -20,12 +21,17 @@ class TestAuthPage:
     4.	Убедиться, что авторизация прошла успешно.
 
     """)
-    def test_verify_authorization_image_is_displayed_after_authorization_by_basic_auth(self, driver):
+    def test_verify_authorization_by_basic_auth(self, driver):
+        info = next(create_person())
+        username = "httpwatch"
+        password = info.password
+
         auth_page = AuthPage(driver)
         auth_page.open(Links.URL_AUTH)
         auth_page.click_display_image_button()
-        auth_page.authorization_basic()
-        with (allure.step("Проверить, что авторизация прошла успешно: "
-                          "картинка об авторизации отображается на странице")):
-            assert auth_page.authorization_image_is_displayed(), \
-                "The authorization image doesn't displayed on page"
+        header, status_code = auth_page.authorization_basic(username, password)
+        with allure.step("Проверить, что авторизация прошла успешно"):
+            assert "Basic" in header, \
+                "Headers hasn't expected header Authorization: Basic ... "
+            assert status_code == 200, \
+                f'Response status code is incorrect, actual: {status_code}, expected : 200'
