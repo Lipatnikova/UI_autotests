@@ -6,3 +6,4 @@ class Links:
     URL_AUTH = " https://www.httpwatch.com/httpgallery/authentication/#showExample10"
     URL_LOGIN = "https://www.way2automation.com/angularjs-protractor/registeration/#/login"
     URL_SQL_EX = "https://www.sql-ex.ru/index.php"
+    URL_WP_LOG_IN = "http://localhost:8000/wp-login.php"
