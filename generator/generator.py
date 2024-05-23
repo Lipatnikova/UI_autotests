@@ -32,3 +32,13 @@ def generate_current_date() -> str:
 def random_number(start, end) -> int:
     """Get a random number between the given start and end values"""
     return random.randint(start, end)
+
+
+def random_choice(data):
+    """Get a random choice from the given data"""
+    return random.choice(data)
+
+
+def random_sample(list_data, count):
+    """Get """
+    return random.sample(list_data, count)

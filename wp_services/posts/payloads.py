@@ -1,7 +1,7 @@
 from pydantic import ValidationError
 from faker import Faker
 
-from generator.generator import generate_current_date
+from generator.generator import generate_current_date, random_number
 from helpers.convert_data import ConversionData
 from wp_services.posts.models.posts_model import PayloadCreatePost, PayloadUpdatePost
 
@@ -48,13 +48,26 @@ class Payloads:
             "post_name": fake.name(),
             "comment_status": "open",
             "post_date": post_date,
-            "post_date_gmt": ConversionData.convert_to_gmt(post_date),
-            "post_modified": generate_current_date(),
+            "post_date_gmt": post_modified_gmt,
+            "post_modified": post_date,
             "post_modified_gmt": post_modified_gmt,
+            "guid": "http://",
             "post_content": fake.text(),
             "post_title": fake.sentence(),
             "post_excerpt": fake.text(),
             "to_ping": fake.text(),
             "pinged": fake.text(),
             "post_content_filtered": fake.text()
+        }
+
+    @staticmethod
+    def update_post_db():
+        return {
+            "post_author": random_number(2, 10),
+            "post_name": fake.name(),
+            "post_title": fake.sentence(),
+            "post_date": generate_current_date(),
+            "post_date_gmt": ConversionData.convert_to_gmt(generate_current_date()),
+            "post_modified": generate_current_date(),
+            "post_modified_gmt": ConversionData.convert_to_gmt(generate_current_date())
         }

@@ -4,7 +4,7 @@ from pydantic import BaseModel, RootModel, Field, HttpUrl
 
 
 class Guid(BaseModel):
-    rendered: HttpUrl
+    rendered: str
 
 
 class Title(BaseModel):

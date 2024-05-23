@@ -107,3 +107,10 @@ class HTTPHandler(HTTPHelper):
         Assertions.check_response_is_200(response)
         HTTPHelper.attach_response(response.json())
         return HTTPHelper.validate_response(response.json(), model)
+
+    @staticmethod
+    def double_delete(url: str, auth: tuple):
+        """Sends second DELETE request to the specified URL and validates status code is 404"""
+        response = requests.delete(url=url, auth=auth, verify=False)
+        Assertions.check_response_is_404(response)
+        return response
