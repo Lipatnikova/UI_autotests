@@ -11,14 +11,14 @@ from wp_services.posts.payloads import Payloads
 load_dotenv()
 
 
-class PostsAPI(HTTPHandler):
-
+class PostsAPI:
+    http_handler = HTTPHandler()
     BASE_HOST = f"{os.getenv('WP_BASE_HOST')}/index.php?rest_route=/"
     posts = f"{BASE_HOST}wp/v2/posts"
 
     def get_all_posts(self):
         with allure.step("Получить список всех постов"):
-            response = HTTPHandler.get(
+            response = self.http_handler.get(
                 url=self.posts,
                 model=AllPostsModel
             )
@@ -27,7 +27,7 @@ class PostsAPI(HTTPHandler):
 
     def get_post_by_id(self, post_id):
         with allure.step("Получить информацию поста по его ID"):
-            response = HTTPHandler.get(
+            response = self.http_handler.get(
                 url=f"{self.posts}/{post_id}",
                 model=PostModel
             )
@@ -36,7 +36,7 @@ class PostsAPI(HTTPHandler):
 
     def create_post(self, payload, auth):
         with allure.step("Создать новый пост"):
-            response = HTTPHandler.post(
+            response = self.http_handler.post(
                 url=self.posts,
                 model=PostModel,
                 payload=payload,
@@ -47,7 +47,7 @@ class PostsAPI(HTTPHandler):
 
     def update_post(self, payload, auth, post_id):
         with allure.step("Обновить данные поста"):
-            response = HTTPHandler.post(
+            response = self.http_handler.post(
                 url=f"{self.posts}/{post_id}",
                 model=PostModel,
                 payload=payload,
@@ -58,7 +58,7 @@ class PostsAPI(HTTPHandler):
 
     def delete_post(self, post_id, auth):
         with allure.step("Удалить пост"):
-            response = HTTPHandler.delete(
+            response = self.http_handler.delete(
                 url=f"{self.posts}/{post_id}&force=true",
                 model=PostModelDel,
                 auth=auth
@@ -82,17 +82,6 @@ class PostsAPI(HTTPHandler):
             deleted_posts = []
 
             for post_id in posts_to_delete:
-                self.delete_post(post_id, basic_auth_wp)
-                deleted_posts.append(post_id)
-
-            return deleted_posts
-
-    def delete_remaining_posts(self, new_posts_ids, del_ids, basic_auth_wp):
-        with allure.step("Удалить оставшиеся posts которые были созданы для теста"):
-            remaining_ids = [post_id for post_id in new_posts_ids if post_id not in del_ids]
-            deleted_posts = []
-
-            for post_id in remaining_ids:
                 self.delete_post(post_id, basic_auth_wp)
                 deleted_posts.append(post_id)
 

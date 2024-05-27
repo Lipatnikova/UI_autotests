@@ -6,17 +6,20 @@ from pydantic import ValidationError
 from helpers.assertions import Assertions
 
 
+def attach_response(func):
+    def wrapper(*args, **kwargs):
+        response = func(*args, **kwargs)
+        if isinstance(response, requests.Response):
+            response_json = response.json()
+            response_json_str = json.dumps(response_json, indent=4)
+            allure.attach(body=response_json_str, name="API Response", attachment_type=AttachmentType.JSON)
+            return response_json
+        else:
+            return response
+    return wrapper
+
+
 class HTTPHelper:
-
-    @staticmethod
-    def attach_response(response: dict) -> None:
-        """Attaches the API response to the allure report.
-
-        Args:
-            response (dict): The API response as a dictionary.
-        """
-        response = json.dumps(response, indent=4)
-        allure.attach(body=response, name="API Response", attachment_type=AttachmentType.JSON)
 
     @staticmethod
     def validate_response(response_json: dict, model) -> dict:
@@ -42,10 +45,11 @@ class HTTPHelper:
         return validated_data.model_dump()
 
 
-class HTTPHandler(HTTPHelper):
+class HTTPHandler:
+    verify_data = HTTPHelper()
 
-    @staticmethod
-    def get(url: str, model, params: dict = None) -> dict:
+    @attach_response
+    def get(self, url: str, model, params: dict = None) -> dict:
         """
         Sends a GET request to the specified URL and validates the response.
 
@@ -62,11 +66,10 @@ class HTTPHandler(HTTPHelper):
         """
         response = requests.get(url=url, params=params)
         Assertions.check_response_is_200(response)
-        HTTPHelper.attach_response(response.json())
-        return HTTPHelper.validate_response(response.json(), model)
+        return self.verify_data.validate_response(response.json(), model)
 
-    @staticmethod
-    def post(url: str, model, payload: dict, auth: tuple) -> dict:
+    @attach_response
+    def post(self, url: str, model, payload: dict, auth: tuple) -> dict:
         """
         Sends a POST request to the specified URL with the provided payload and validates the response.
 
@@ -84,11 +87,10 @@ class HTTPHandler(HTTPHelper):
         """
         response = requests.post(url=url, json=payload, auth=auth, verify=False)
         Assertions.check_response_is_200_or_201(response)
-        HTTPHelper.attach_response(response.json())
-        return HTTPHelper.validate_response(response.json(), model)
+        return self.verify_data.validate_response(response.json(), model)
 
-    @staticmethod
-    def delete(url: str, model, auth: tuple) -> dict:
+    @attach_response
+    def delete(self, url: str, model, auth: tuple) -> dict:
         """
         Sends a DELETE request to the specified URL and validates the response.
 
@@ -105,8 +107,7 @@ class HTTPHandler(HTTPHelper):
         """
         response = requests.delete(url=url, auth=auth, verify=False)
         Assertions.check_response_is_200(response)
-        HTTPHelper.attach_response(response.json())
-        return HTTPHelper.validate_response(response.json(), model)
+        return self.verify_data.validate_response(response.json(), model)
 
     @staticmethod
     def double_delete(url: str, auth: tuple):
