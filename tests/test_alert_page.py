@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from config.links import Links
 from generator.generator import create_person
@@ -6,6 +7,7 @@ from pages.alert_page import AlertPage
 
 
 class TestAlertPage:
+    @pytest.mark.ui_autotests
     @allure.epic("Работа с элементами на странице")
     @allure.feature("Alerts")
     @allure.story("Ввести кастомный текст в Alert")
@@ -37,6 +39,7 @@ class TestAlertPage:
                 (f"The message hasn't contains expected text: {first_name}."
                  f"Actual message: {message}")
 
+    @pytest.mark.ui_autotests
     @allure.epic("Работа с элементами на странице")
     @allure.feature("Alerts")
     @allure.story("Проверить текст в Alert падающий кейс")

@@ -7,6 +7,7 @@ from pages.angularjs_login_page import AngularjsLoginPage
 
 
 class TestAngularjsLoginPage:
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация angularjs")
     @allure.story("Отправка формы авторизации и проверка сообщений об успешной авторизации")
@@ -45,6 +46,7 @@ class TestAngularjsLoginPage:
             assert "angularjs-protractor/registeration" in current_url, \
                 "Current url hasn\'t expected endpoint \"angularjs-protractor/registeration\""
 
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация angularjs")
     @allure.story("Отправка формы авторизации с невалидными данными и проверка сообщения об ошибке")
@@ -82,6 +84,7 @@ class TestAngularjsLoginPage:
             assert "login" in current_url, \
                 "Current url hasn\'t expected endpoint \"login\""
 
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация angularjs")
     @allure.story("Проверить фокус на поле username")
@@ -113,6 +116,7 @@ class TestAngularjsLoginPage:
             assert page_login.is_username_has_focus() is False, \
                 "Username field shouldn't have focus after removing focus"
 
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация angularjs")
     @allure.story("Проверить наличие scroll на странице")

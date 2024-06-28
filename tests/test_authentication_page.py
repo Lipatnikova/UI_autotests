@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from config.links import Links
 from generator.generator import create_person
@@ -6,6 +7,7 @@ from pages.authentication_page import AuthPage
 
 
 class TestAuthPage:
+    @pytest.mark.ui_autotests
     @allure.epic("Работа с элементами на странице")
     @allure.feature("Basic auth")
     @allure.story("Пройти авторизацию используя Basic auth")

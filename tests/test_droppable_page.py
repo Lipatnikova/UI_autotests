@@ -1,10 +1,12 @@
 import allure
+import pytest
 
 from pages.droppable_page import DroppablePage
 from config.links import Links
 
 
 class TestDroppablePage:
+    @pytest.mark.ui_autotests
     @allure.epic("Работа с элементами на странице")
     @allure.feature("Drag n Drop (IFrame)")
     @allure.story("Перетанскивание элемента на другой элемент")
@@ -33,6 +35,7 @@ class TestDroppablePage:
                  f"Actual message text: {message_after}"
                  f"Expected message text: Dropped!")
 
+    @pytest.mark.ui_autotests
     @allure.epic("Работа с элементами на странице")
     @allure.feature("Drag n Drop (IFrame)")
     @allure.story("Перетанскивание элемента на другой элемент по координатам падающий кейс")

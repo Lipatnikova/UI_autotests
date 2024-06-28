@@ -8,6 +8,7 @@ from pages.sql_ex_login_page import SqlExLoginPage
 
 class TestSqlExLoginPage:
 
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация")
     @allure.story("Авторизация запись Cookies в файл")
@@ -35,6 +36,7 @@ class TestSqlExLoginPage:
             assert page_sql_ex.login_form_is_visible() is False, \
                 "Authorization FAILED, the authorization form is displayed on the page"
 
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация")
     @allure.story("Авторизация перезапись Cookies сессии")
@@ -69,6 +71,7 @@ class TestSqlExLoginPage:
 
         use_cookies.delete_cookies_file()
 
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Авторизация")
     @allure.story("Проверить наличие scroll на странице")

@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from config.links import Links
 from generator.generator import create_person
@@ -6,6 +7,7 @@ from pages.registration_page import RegistrationPage
 
 
 class TestRegistration:
+    @pytest.mark.ui_autotests
     @allure.epic("Управление пользователями")
     @allure.feature("Регистрация")
     @allure.story("Отправка формы и отсутствие сообщений об ошибках")

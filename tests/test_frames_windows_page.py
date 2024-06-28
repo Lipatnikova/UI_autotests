@@ -1,10 +1,12 @@
 import allure
+import pytest
 
 from config.links import Links
 from pages.frames_windows_page import FramesWindowsPage
 
 
 class TestFramesWindowsPage:
+    @pytest.mark.ui_autotests
     @allure.epic("Работа с элементами на странице")
     @allure.feature("Frames and windows")
     @allure.story("Переключение в новую вкладку")
